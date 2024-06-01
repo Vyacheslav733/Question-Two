@@ -1,0 +1,39 @@
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY IDENTITY(1,1),
+    ProductName NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY IDENTITY(1,1),
+    CategoryName NVARCHAR(100) NOT NULL
+);
+
+CREATE TABLE ProductCategories (
+    ProductCategoryID INT PRIMARY KEY IDENTITY(1,1),
+    ProductID INT NOT NULL REFERENCES Products(ProductID),
+    CategoryID INT NULL REFERENCES Categories(CategoryID)
+);
+
+CREATE UNIQUE INDEX IX_ProductCategories_ProductID_CategoryID
+ON ProductCategories(ProductID, CategoryID);
+
+INSERT INTO Products (ProductName) VALUES ('Product1'), ('Product2'), ('Product3');
+INSERT INTO Categories (CategoryName) VALUES ('Category1'), ('Category2'), ('Category3');
+INSERT INTO ProductCategories (ProductID, CategoryID) VALUES 
+(1, 1), 
+(1, 2), 
+(2, 2), 
+(3, 3),
+(1, NULL),
+(2, NULL);
+
+-- Запрос
+SELECT 
+    p.ProductName, 
+    ISNULL(c.CategoryName, 'Нет категории') AS CategoryName
+FROM 
+    Products p
+LEFT JOIN 
+    ProductCategories pc ON p.ProductID = pc.ProductID
+LEFT JOIN 
+    Categories c ON pc.CategoryID = c.CategoryID;
