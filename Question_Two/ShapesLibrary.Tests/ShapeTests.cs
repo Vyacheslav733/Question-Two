@@ -1,6 +1,6 @@
 namespace ShapesLibrary.Tests
 {
-	public class UnitTest1
+	public class ShapeTests
 	{
 		[Fact]
 		public void TestCircleArea()
